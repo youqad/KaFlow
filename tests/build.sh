@@ -12,7 +12,7 @@ echo "Building example in directory $1"
 
 rm -rf output ; mkdir output ; cd output
 
-KaSim -syntax 3 -i ../*.ka -l $LEN -trace t.json
+KaSim -i ../*.ka -l $LEN -trace t.json
 
 $KAFLOW t.json -o "story." $ARG
 

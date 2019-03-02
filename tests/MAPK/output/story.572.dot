@@ -1,0 +1,101 @@
+digraph G{
+  rankdir="TB";
+  ranksep=0.30;
+  node [fontname="CMU Serif"];
+  edge [fontname="CMU Serif"];
+  
+  7 [label="Intro Ras", shape=rectangle, style=filled, fillcolor="0.000 0.000 1.000"]
+  
+  30 [label="Intro Ras", shape=rectangle, style=filled, fillcolor="0.000 0.000 1.000"]
+  
+  49 [label="Intro Ras", shape=rectangle, style=filled, fillcolor="0.000 0.000 1.000"]
+  
+  87 [label="Intro Ras", shape=rectangle, style=filled, fillcolor="0.000 0.000 1.000"]
+  
+  421 [label="Intro Raf, __incr", shape=rectangle, style=filled, fillcolor="0.000 0.000 1.000"]
+  
+  476 [label="Intro Raf, __incr", shape=rectangle, style=filled, fillcolor="0.000 0.000 1.000"]
+  
+  787 [label="Intro Raf, __incr", shape=rectangle, style=filled, fillcolor="0.000 0.000 1.000"]
+  
+  925 [label="Intro Raf, __incr", shape=rectangle, style=filled, fillcolor="0.000 0.000 1.000"]
+  
+  1970 [label="Intro MEK, __incr", shape=rectangle, style=filled, fillcolor="0.000 0.000 1.000"]
+  
+  2022 [label="Intro MEK, __incr", shape=rectangle, style=filled, fillcolor="0.000 0.000 1.000"]
+  
+  3091 [label="Intro MAPK, __incr", shape=rectangle, style=filled, fillcolor="0.000 0.000 1.000"]
+  
+  3490 [label="Ras.Raf", shape=invhouse, style=filled, fillcolor="0.000 0.000 0.975"]
+  
+  4152 [label="Ras_act_Raf", shape=invhouse, style=filled, fillcolor="0.000 0.000 0.921"]
+  
+  4439 [label="Ras.Raf", shape=invhouse, style=filled, fillcolor="0.000 0.000 0.902"]
+  
+  4505 [label="Ras_act_Raf", shape=invhouse, style=filled, fillcolor="0.000 0.000 0.899"]
+  
+  5696 [label="Ras.Raf", shape=invhouse, style=filled, fillcolor="0.000 0.000 0.832"]
+  
+  5705 [label="Ras_act_Raf", shape=invhouse, style=filled, fillcolor="0.000 0.000 0.831"]
+  
+  6076 [label="Raf.MEK0", shape=invhouse, style=filled, fillcolor="0.000 0.000 0.814"]
+  
+  6113 [label="Raf_phos_MEK", shape=invhouse, style=filled, fillcolor="0.000 0.000 0.812"]
+  
+  6517 [label="Raf.MEK1", shape=invhouse, style=filled, fillcolor="0.000 0.000 0.796"]
+  
+  6590 [label="Ras.Raf", shape=invhouse, style=filled, fillcolor="0.000 0.000 0.793"]
+  
+  6635 [label="Raf_phos_MEK", shape=invhouse, style=filled, fillcolor="0.000 0.000 0.792"]
+  
+  7655 [label="Ras_act_Raf", shape=invhouse, style=filled, fillcolor="0.000 0.000 0.760"]
+  
+  7661 [label="Raf.MEK0", shape=invhouse, style=filled, fillcolor="0.000 0.000 0.760"]
+  
+  10188 [label="Raf_phos_MEK", shape=invhouse, style=filled, fillcolor="0.000 0.000 0.697"]
+  
+  11719 [label="Raf.MEK1", shape=invhouse, style=filled, fillcolor="0.000 0.000 0.669"]
+  
+  12907 [label="Raf_phos_MEK", shape=invhouse, style=filled, fillcolor="0.000 0.000 0.651"]
+  
+  14960 [label="MEK.MAPK0", shape=invhouse, style=filled, fillcolor="0.000 0.000 0.624"]
+  
+  15643 [label="MEK_phos_MAPK0", shape=invhouse, style=filled, fillcolor="0.000 0.000 0.612"]
+  
+  15650 [label="MEK.MAPK1", shape=invhouse, style=filled, fillcolor="0.000 0.000 0.612"]
+  
+  16281 [label="MEK_phos_MAPK1", shape=invhouse, style=filled, fillcolor="0.000 0.000 0.600"]
+  
+  
+  15650 -> 16281 [dir=none, color="0.000 0.000 0.000"] 
+  15643 -> 15650 [dir=none, color="0.000 0.000 0.000"] 
+  14960 -> 15643 [dir=none, color="0.000 0.000 0.000"] 
+  12907 -> 15650 [dir=none, color="0.000 0.000 0.000"] 
+  11719 -> 12907 [dir=none, color="0.000 0.000 0.000"] 
+  10188 -> 11719 [dir=none, color="0.000 0.000 0.000"] 
+  7661 -> 10188 [dir=none, color="0.000 0.000 0.000"] 
+  7655 -> 7661 [dir=none, color="0.000 0.000 0.000"] 
+  6635 -> 14960 [dir=none, color="0.000 0.000 0.000"] 
+  6590 -> 7655 [dir=none, color="0.000 0.000 0.000"] 
+  6517 -> 6635 [dir=none, color="0.000 0.000 0.000"] 
+  6113 -> 6517 [dir=none, color="0.000 0.000 0.000"] 
+  6076 -> 6113 [dir=none, color="0.000 0.000 0.000"] 
+  5705 -> 6076 [dir=none, color="0.000 0.000 0.000"] 
+  5696 -> 5705 [dir=none, color="0.000 0.000 0.000"] 
+  4505 -> 6517 [dir=none, color="0.000 0.000 0.000"] 
+  4439 -> 4505 [dir=none, color="0.000 0.000 0.000"] 
+  4152 -> 11719 [dir=none, color="0.000 0.000 0.000"] 
+  3490 -> 4152 [dir=none, color="0.000 0.000 0.000"] 
+  3091 -> 14960 [dir=none, color="0.000 0.000 0.000"] 
+  2022 -> 7661 [dir=none, color="0.000 0.000 0.000"] 
+  1970 -> 6076 [dir=none, color="0.000 0.000 0.000"] 
+  925 -> 5696 [dir=none, color="0.000 0.000 0.000"] 
+  787 -> 6590 [dir=none, color="0.000 0.000 0.000"] 
+  476 -> 3490 [dir=none, color="0.000 0.000 0.000"] 
+  421 -> 4439 [dir=none, color="0.000 0.000 0.000"] 
+  87 -> 4439 [dir=none, color="0.000 0.000 0.000"] 
+  49 -> 6590 [dir=none, color="0.000 0.000 0.000"] 
+  30 -> 3490 [dir=none, color="0.000 0.000 0.000"] 
+  7 -> 5696 [dir=none, color="0.000 0.000 0.000"] 
+  
+  }

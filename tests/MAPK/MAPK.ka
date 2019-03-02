@@ -1,0 +1,86 @@
+///// SIGNATURE
+
+%agent: Ras(x[x.Raf]) // GTPase Ras
+%agent: Raf(x[x.Ras x.MEK x.KKKPase], p{=0 / += 1}) // RAF kinase a.k.a MAPKKK {unactivated vs. activated}
+%agent: MEK(x[x.Raf x.MAPK x.KKPase], p{=0 / += 2}) // Mitogen-activated protein kinase kinase (MAPKK) a.k.a MEK {phosphate groups: from 2 to 0} (can be phosophrylated twice)
+
+%agent: MAPK(x[x.MEK x.KPase], p{=0 / += 2}) // Extracellular signal-regulated kinases (ERK) a.k.a MAPK
+
+%agent: KKKPase(x[x.Raf]) // Cause the phosphatase reaction of Ras ("unphosphorylation")
+%agent: KKPase(x[x.MEK]) // Cause the phosphatase reaction of MEK
+%agent: KPase(x[x.MAPK]) // Cause the phosphatase reaction of MAPK
+
+
+///// RULES
+
+'Ras.Raf' Ras(x[./1]), Raf(x[./1], p{=0}) @ 'on_phos_KKK' // GTPase Ras binds Raf
+'Ras_act_Raf' Ras(x[1/.]), Raf(x[1/.], p{+=1}) @ 'off_phos_KKK' // GTPase Ras activates Raf
+'KKKPase.Raf' KKKPase(x[./1]), Raf(x[./1], p{=1}) @ 'on_unphos_KKK' // Phosphatase reaction
+'Raf_unphos' KKKPase(x[1/.]), Raf(x[1/.], p{-=1}) @ 'off_unphos_KKK' // Phosphatase reaction
+
+/*
+/!\ : the only counter test for equality allowed in the syntax is >=, which forbids Raf(x[./2], p{=1}), MEK(x[./2], p{<=1})
+*/
+'Raf.MEK0' Raf(x[./2], p{=1}), MEK(x[./2], p{=0}) @ 'on_phos_KK' // Raf binds MEK
+'Raf.MEK1' Raf(x[./2], p{=1}), MEK(x[./2], p{=1}) @ 'on_phos_KK' // Raf binds MEK
+'Raf_phos_MEK' Raf(x[2/.], p{=1}), MEK(x[2/.], p{+=1}) @ 'off_phos_KK' // Raf phosphorylates MEK
+
+'KKPase.MEK' KKPase(x[./2]), MEK(x[./2], p{>=1}) @ 'on_unphos_KK' // KKPase binds MEK
+'MEK_unphos' KKPase(x[2/.]), MEK(x[2/.], p{-=1}) @ 'off_unphos_KK' // Phosphatase reaction
+
+
+
+'MEK.MAPK0' MEK(x[./3], p{=2}), MAPK(x[./3], p{=0}) @ 'on_phos_K' // MEK binds MAPK
+'MEK.MAPK1' MEK(x[./3], p{=2}), MAPK(x[./3], p{=1}) @ 'on_phos_K' // MEK binds MAPK
+'MEK_phos_MAPK0' MEK(x[3/.], p{=2}), MAPK(x[3/.], p{=0 / +=1}) @ 'off_phos_K' // MEK phosphorylates MAPK
+'MEK_phos_MAPK1' MEK(x[3/.], p{=2}), MAPK(x[3/.], p{=1 / +=1}) @ 'off_phos_K' // MEK phosphorylates MAPK
+
+
+'KPase.MAPK' KPase(x[./3]), MAPK(x[./3], p{>=1}) @ 'on_unphos_K' // KPase binds MEK
+'MAPK_unphos' KPase(x[3/.]), MAPK(x[3/.], p{-=1}) @ 'off_unphos_K' // Phosphatase reaction
+
+
+'MAPK_inh_Raf' MAPK(x[.], p{=2}), Raf(x[.], p{=1 / -=1}) @ 'inh_KKK' // MAPK inhibits Raf
+
+///// VARIABLES
+
+%var: 'on_phos_KKK' 5
+%var: 'off_phos_KKK' 2
+%var: 'on_unphos_KKK' 2
+%var: 'off_unphos_KKK' 1
+
+%var: 'on_phos_KK' 5
+%var: 'off_phos_KK' 2
+%var: 'on_unphos_KK' 2
+%var: 'off_unphos_KK' 1
+
+%var: 'on_phos_K' 10
+%var: 'off_phos_K' 5
+%var: 'on_unphos_K' 2
+%var: 'off_unphos_K' 1
+
+%var: 'inh_KKK' 1
+
+///// INITIAL CONDITIONS
+%obs: 'MAPK_pp' |MAPK(x[.], p{=2})|
+%obs: 'MEK_pp' |MEK(x[.], p{=2})|
+%obs: 'Raf_p' |Raf(x[.], p{=1})|
+/*
+%obs: 'MAPK_p' |MAPK(x[.], p{=1})|
+%obs: 'MEK_p' |MEK(x[.], p{=1})|
+%obs: 'Raf' |Raf(x[.], p{=0})|
+%obs: 'MAPK' |MAPK(x[.], p{=0})|
+%obs: 'MEK' |MEK(x[.], p{=0})|
+*/
+
+%var: 'n_Ras' 100
+%var: 'n_Raf' 1000
+%var: 'n_MEK' 1000
+%var: 'n_MAPK' 1000
+%var: 'n_Pase' 100
+
+%init: 'n_Ras' Ras()
+%init: 'n_Raf' Raf(p{=0})
+%init: 'n_MEK' MEK(p{=0})
+%init: 'n_MAPK' MAPK(p{=0})
+%init: 'n_Pase' KKKPase(), KKPase(), KPase()

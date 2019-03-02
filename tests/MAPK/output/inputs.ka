@@ -1,0 +1,79 @@
+// "uuid" : "601544355"
+%def: "seed" "333403696"
+%def: "dumpIfDeadlocked" "true"
+%def: "maxConsecutiveClash" "2"
+%def: "plotPeriod" "1" "t.u."
+%def: "outputFileName" "data.csv"
+%def: "traceFileName" "t.json"
+
+
+%agent: Ras(x[x.Raf])
+%agent: Raf(x[x.Ras x.MEK x.KKKPase] p{=0/+=1})
+%agent: MEK(x[x.Raf x.MAPK x.KKPase] p{=0/+=2})
+%agent: MAPK(x[x.MEK x.KPase] p{=0/+=2})
+%agent: KKKPase(x[x.Raf])
+%agent: KKPase(x[x.MEK])
+%agent: KPase(x[x.MAPK])
+
+%var:/*0*/ 'on_phos_KKK' 5
+%var:/*1*/ 'off_phos_KKK' 2
+%var:/*2*/ 'on_unphos_KKK' 2
+%var:/*3*/ 'off_unphos_KKK' 1
+%var:/*4*/ 'on_phos_KK' 5
+%var:/*5*/ 'off_phos_KK' 2
+%var:/*6*/ 'on_unphos_KK' 2
+%var:/*7*/ 'off_unphos_KK' 1
+%var:/*8*/ 'on_phos_K' 10
+%var:/*9*/ 'off_phos_K' 5
+%var:/*10*/ 'on_unphos_K' 2
+%var:/*11*/ 'off_unphos_K' 1
+%var:/*12*/ 'inh_KKK' 1
+%var:/*13*/ 'MAPK_pp' |MAPK(x[.] p{=2})|
+%var:/*14*/ 'MEK_pp' |MEK(x[.] p{=2})|
+%var:/*15*/ 'Raf_p' |Raf(x[.] p{=1})|
+%var:/*16*/ 'n_Ras' 100
+%var:/*17*/ 'n_Raf' 1000
+%var:/*18*/ 'n_MEK' 1000
+%var:/*19*/ 'n_MAPK' 1000
+%var:/*20*/ 'n_Pase' 100
+%plot: [T]
+%plot: MAPK_pp
+%plot: MEK_pp
+%plot: Raf_p
+
+'Ras.Raf' Raf(x[./1] p{=0}), Ras(x[./1]) @ on_phos_KKK
+'Ras_act_Raf' Raf(x[1/.] p{>=0/+=1}), Ras(x[1/.]),  @ off_phos_KKK
+'KKKPase.Raf' Raf(x[./1] p{=1}), KKKPase(x[./1]) @ on_unphos_KKK
+'Raf_unphos' Raf(x[1/.] p{>=1/+=-1}), KKKPase(x[1/.]) @ off_unphos_KKK
+'Raf.MEK0' MEK(x[./2] p{=0}), Raf(x[./2] p{=1}) @ on_phos_KK
+'Raf.MEK1' MEK(x[./2] p{=1}), Raf(x[./2] p{=1}) @ on_phos_KK
+'Raf_phos_MEK' MEK(x[2/.] p{>=0/+=1}), Raf(x[2/.] p{=1}),  @ off_phos_KK
+'KKPase.MEK' MEK(x[./2] p{>=1}), KKPase(x[./2]) @ on_unphos_KK
+'MEK_unphos' MEK(x[2/.] p{>=1/+=-1}), KKPase(x[2/.]) @ off_unphos_KK
+'MEK.MAPK0' MAPK(x[./3] p{=0}), MEK(x[./3] p{=2}) @ on_phos_K
+'MEK.MAPK1' MAPK(x[./3] p{=1}), MEK(x[./3] p{=2}) @ on_phos_K
+'MEK_phos_MAPK0' MAPK(x[3/.] p{=0/+=1}), MEK(x[3/.] p{=2}),  @ off_phos_K
+'MEK_phos_MAPK1' MAPK(x[3/.] p{=1/+=1}), MEK(x[3/.] p{=2}),  @ off_phos_K
+'KPase.MAPK' MAPK(x[./3] p{>=1}), KPase(x[./3]) @ on_unphos_K
+'MAPK_unphos' MAPK(x[3/.] p{>=1/+=-1}), KPase(x[3/.]) @ off_unphos_K
+'MAPK_inh_Raf' Raf(x[.] p{=1/+=-1}), MAPK(x[.] p{=2}) @ inh_KKK
+
+/*0*/%mod: (|MAPK(p{=3})| = 1) do $PRINTF "
+Counter p of agent MAPK reached maximum
+"; $STOP "counter_perturbation.ka"; repeat [false]
+/*1*/%mod: (|MEK(p{=3})| = 1) do $PRINTF "
+Counter p of agent MEK reached maximum
+"; $STOP "counter_perturbation.ka"; repeat [false]
+/*2*/%mod: (|Raf(p{=2})| = 1) do $PRINTF "
+Counter p of agent Raf reached maximum
+"; $STOP "counter_perturbation.ka"; repeat [false]
+/*3*/%mod: [true] do $TRACK MAPK(x[.] p{=2}) [true]; repeat [false]
+/*4*/%mod: [true] do $TRACK Raf(x[.] p{=1}) [true]; repeat [false]
+
+%init: n_Ras Ras(x[.])
+%init: n_Raf Raf(x[.] p{=0})
+%init: n_MEK MEK(x[.] p{=0})
+%init: n_MAPK MAPK(x[.] p{=0})
+%init: n_Pase KKKPase(x[.]), KKPase(x[.]), KPase(x[.])
+
+%mod: [E] = 15629 do $STOP;
