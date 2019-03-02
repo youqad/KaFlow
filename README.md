@@ -10,4 +10,4 @@ this program does the following:
 
 Install KappaLib using Opam: `opam pin --dev add KaSim`. Then,
 just type `make`. In order to build the tests, type
-`cd tests/contextual-egfr ; make`
+`cd tests/MAPK ; make`
