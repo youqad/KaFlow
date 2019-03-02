@@ -1,8 +1,10 @@
 mkdir output/png
-for i in {1..1227}
+nb_files=$(find output -maxdepth 1 -name "story.*.pdf" | wc -l)
+
+for i in $(seq 1 $nb_files);
 do
-   sips -z 1024 -s format png output/story.${i}.pdf --out output/png/story.${i}.png
-   convert output/png/story.${i}.png -background=white -flatten +matte img.png &&
+   sips -z 720 1280 -s format png output/story.${i}.pdf --out output/png/story.${i}.png
+   convert output/png/story.${i}.png -flatten +matte img.png &&
    mv img.png output/png/story.${i}.png
 done
-ffmpeg -qscale 5 -r 2 -b 9600 -i output/png/story.%d.png movie.mp4
+ffmpeg -framerate 2 -i output/png/story.%d.png -s:v 1280x720 -c:v libx264 -crf 0 -pix_fmt yuv420p -y stories.mp4
